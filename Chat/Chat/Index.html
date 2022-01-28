@@ -1,0 +1,29 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Simple Chatting</title>
+</head>
+<body>
+    <input type="text" id="msg" />
+    <input type="button" id="send" />
+    <hr />
+    <ul id="msgs"></ul>
+    <script src="../Scripts/jquery-3.4.1.min.js"></script>
+    <script src="../Scripts/jquery.signalR-2.4.3.min.js"></script>
+    <script src="/signalr/hubs"></script>
+    <script>
+        $(function () {
+            var chat = $.connection.Chat;
+            chat.client.serverToClient = function (msg) {
+                $("#msgs").append("<li>" + msg + "</li>");
+            };
+            $.connection.hub.start().done(function () {
+                $("#send").click(function () {
+                    chat.server.clientToServer($("#msg").val());
+                });
+            });
+        });
+    </script>
+</body>
+</html>
